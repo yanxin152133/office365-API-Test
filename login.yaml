@@ -1,0 +1,66 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Office365开发者续订----获取Token'
+  description: 获取Token
+servers:
+  - url: https://login.microsoftonline.com/
+paths:
+  /accounts:
+    post:
+      summary: Get accounts
+      description: Gets Postman billing account details for the given team.
+      operationId: getAccounts
+      tags:
+        - Billing
+      responses:
+        '200':
+          $ref: '#/components/responses/getAccounts'
+        '400':
+          $ref: '#/components/responses/invoicesNoTeam400Error'
+        '401':
+          $ref: '#/components/responses/unauthorizedError'
+        '500':
+          $ref: '#/components/responses/common500ErrorServerError'
+
+components:
+  schemas:
+    SpacecraftId:
+      description: The unique identifier of a spacecraft
+      type: string
+    Spacecraft:
+      type: object
+      required:
+        - id
+        - name
+        - type
+      properties:
+        id:
+          $ref: '#/components/schemas/SpacecraftId'
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - capsule
+            - probe
+            - satellite
+            - spaceplane
+            - station
+        description:
+          type: string
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: A human readable error message
+          type: string
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+security:
+  - ApiKey: []
